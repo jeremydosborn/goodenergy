@@ -87,3 +87,7 @@ Status updates (status.Entry) can have comments (status.EntryComment).
 A pledge (action.Pledge) is when someone pledges to perform a given action (action.Action). Other users can comment on action (action.Comment), or mention what is blocking them from performing said action (action.Barrier).
 
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/jeremydosborn/goodenergy/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
