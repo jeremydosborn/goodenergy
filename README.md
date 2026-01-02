@@ -1,89 +1,103 @@
-Good Energy is a behavior change and employee engagement tool. It uses key results from social psychology research (social norms, pledges, identity) to assist individuals in achieving their goals. It has been deployed in production with the David Suzuki Foundation, focused on environmental sustainability, and with a Vancouver area school, focused on student self-improvement.
+****# Good Energy (Archived)
 
-Good Energy was designed as a white-label product. The company purchasing it brands the header, footer, and CSS to look like their site. It then looks integrated into either a company Intranet, or a public Internet.
+**Status:** Archived / abandonware / historical reference only
+**Intended use:** **Posterity, research, and code archaeology** — **not** reuse or deployment
+**License:** GNU Affero GPL v3 (AGPL-3.0) — see `COPYING`
 
-The questions you get asked (top center), as well as the default Pledges (bottom right) are configurable via the django admin interface.
+Good Energy is a behavior-change and employee engagement web app built around well-known findings from social psychology (e.g., social norms, pledges, identity). Historically, it was deployed in production with the David Suzuki Foundation (environmental sustainability) and a Vancouver-area school (student self-improvement).
 
-WARNING: Good Energy is currently [abandon-ware](http://en.wikipedia.org/wiki/Abandonware). You could probably hire the original developers (https://github.com/grahamking or https://github.com/jeremydosborn) to assist in a deployment, and with behavior change consulting, but there's no offical support for it, and we're both pretty busy.
+It was designed as a **white-label** product: each customer could brand the header, footer, and CSS to appear integrated into a company intranet or a public website. Questions (top center) and default pledges (bottom right) were configurable via the Django admin interface.
 
-You should have at least basic Django, Unix, and database skills before trying to set up this app. As long as you understand that, and you need a behavior change / employee engagement tool, we think you'll really like Good Energy.
+---
 
-Good Energy is free software, licensed under the [GNU Affero General Public License](http://www.gnu.org/licenses/agpl.html).
+## 2026 Warning: Do Not Reuse / Do Not Deploy
 
-# Installation
+This repository is **abandonware** and is preserved **for posterity only**.
 
-### Get Dependencies:
+**Do not deploy this system** (especially not on the public internet). It targets an obsolete stack (Python 2.x-era + Django 1.x-era) and depends on historical packages and operational assumptions that are not safe by modern standards.
 
-The obvious stuff:
+If you are looking for a behavior-change or engagement tool in 2026, treat this repository as a **case study** and re-implement the idea on a maintained stack.
 
-  - Python 2.6+
-  - Django 1.3+ 
-  - A Django supported database. Tested with MySQL and Postgres.
-  - Memcached and it's python lib (See: http://docs.djangoproject.com/en/dev/topics/cache/#memcached). Memcached is not optional.
+### Security & operational risks (non-exhaustive)
 
-Python libs:
+* **End-of-life dependencies:** Python 2.x and early Django versions are long out of support and have unpatched vulnerabilities.
+* **Outdated installation assumptions:** older third-party libraries, abandoned upstream URLs, and obsolete tooling.
+* **Insecure default patterns in old deployments:** legacy cache and session configurations, missing modern security headers, etc.
+* **Potentially dangerous “copy/paste” setup:** any legacy instructions that use trivial passwords or excessive database privileges are **not appropriate for production**.
 
-  - pytz: http://pytz.sourceforge.net/ (Ubuntu package: **python-tz**)
-  - Python Imaging Library (PIL): http://effbot.org/zone/pil-index.htm (Ubuntu package: **python-imaging**)
+**If you run this at all**, do so only in an isolated environment (offline VM/container), with fake data, and only for educational purposes.
 
-Django apps:
+---
 
-  - sorl.thumbnail: http://thumbnail.sorl.net/ (**pip install sorl-thumbnail**)
-  - django-compress: http://code.google.com/p/django-compress/ (Checkout source and _python setup.py install_)
+## Support / Maintenance
 
-For the back-end worker (optional):
+There is **no official support** and no maintenance commitment.
+The original authors were:
 
-  - Gearman: http://gearman.org/ (Ubuntu package: **gearman-job-server**)
-  - python-libgearman: http://pypi.python.org/pypi/python-libgearman/ (Ubuntu package: **python-gearman.libgearman**)
-  - oilcan: http://github.com/grahamking/oilcan (See README at that url)
+* [https://github.com/grahamking](https://github.com/grahamking)
+* [https://github.com/jeremydosborn](https://github.com/jeremydosborn)
 
-### Generate SECRET_KEY.
+Please do not treat this as a supported product.
 
-Run this command:
+---
 
-    python -c 'import random; print "".join([random.choice("abcdefghijklmnopqrstuvwxyz123456790!@#$%^&*(-_=+)") for i in range(50)])'
+## What this project was
 
-and in settings.py assign the result to SECRET_KEY (around line 122).
+Good Energy’s top-level concepts:
 
-### Create and init database, tweaks settings
+* **Organization**: each deploying customer/tenant
+* **Campaign**: a set of questions (Indicators), status updates, and pledges
+* **Indicator**: a multiple-choice question answered repeatedly over time (Likert preferred)
+* **Status updates**: entries that can have comments
+* **Pledges**: actions users commit to, with comments and barriers
 
-Create a database and user (suggested name: _goodenergy_).
+Campaigns were commonly run as fixed-date programs. A 5-week campaign length was recommended historically as a practical compromise.
 
-MySQL:
-    CREATE DATABASE goodenergy CHARACTER SET utf8 collate utf8_general_ci;
-    GRANT ALL ON goodenergy.* TO goodenergy@localhost IDENTIFIED BY 'goodenergy';
+---
 
-Postgres:
-    CREATE DATABASE goodenergy ENCODING 'utf8';
-    CREATE USER goodenergy SUPERUSER;
-    ALTER USER goodenergy WITH PASSWORD 'goodenergy';
+## Archived Installation Notes (for historical context only)
 
-If you didn't use 'goodenergy' for the database, user, and password, change settings.py to reflect that.
+These notes are preserved to reflect how the software was originally run. **They are not recommendations.** The stack and ecosystem referenced below are obsolete.
 
-That should be enough to run the dev server. For live you'll need to tweak the file paths in settings.py. You can override any settings with a local_settings.py file in the same directory as settings.py.
+### Original dependencies (historical)
 
-Initialize the databse:
+* Python 2.6+
+* Django 1.3+
+* A Django-supported database (historically tested with MySQL and Postgres)
+* Memcached + Python bindings (**required at the time**)
 
-    ./manage.py syncdb
+Python libs (historical):
 
-That creates a sample campaign for you to play with.
+* pytz
+* PIL (Python Imaging Library)
 
-# Business objects
+Django apps (historical):
 
-The top level concept in Good Energy is an Organization. Each company using or deploying Good Energy is an Organization, and they typically have their own url.
+* `sorl.thumbnail`
+* `django-compress`
 
-Each Organization runs Campaigns. A Campaign is a set of questions (indicator.Indicator), status updates (status.Entry), and pledges (action.Action).
+Optional worker (historical):
 
-A Campaign can start and end on fixed dates, or can start when the user joins and run for a given amount of time. Outside of the demo, most campaigns are fixed dates. It takes about a month for a new habit to form, and people bore easily, so we suggest running campaigns for 5 weeks as a good compromise. Typically the organisation will advertise the campaign ahead of time, and choosing a significant date to start (Earth Day, for example), helps people remember to join.
+* Gearman + Python bindings
+* `oilcan`
 
-An Indicator is a question that gets asked each time users return to the site. Indicators are all multiple choice, the choices are indicator.Option objects. Each users answer is recorded as an indicator.Answer.
+### SECRET_KEY (historical)
 
-You'll notice IndicatorLikert and IndicatorNumber as descendants of Indicator. You should use IndicatorLikert for everthing. IndicatorNumber is only for calculating averages internally.
+A random `SECRET_KEY` was required in `settings.py`. (Modern Django uses similar concepts but the surrounding security model has evolved.)
 
-Internal averages use a system user and a system indicator (OVERALL).
+### Database configuration (historical)
 
-Status updates (status.Entry) can have comments (status.EntryComment).
+Old readmes often suggested simplistic database credentials and privileges. **Do not use trivial passwords or excessive DB privileges** in any environment that matters.
 
-A pledge (action.Pledge) is when someone pledges to perform a given action (action.Action). Other users can comment on action (action.Comment), or mention what is blocking them from performing said action (action.Barrier).
+---
 
+## License
 
+Good Energy is free software, licensed under the **GNU Affero General Public License v3 (AGPL-3.0)**. See `COPYING`.
+
+---
+
+## About this archive
+
+This repository is kept public as a snapshot of an older era of Django/Python application design and a record of an applied behavior-change product. It is **not** a maintained reference implementation and is **not** a modern security baseline.
+********
