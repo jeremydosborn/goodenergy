@@ -1,4 +1,4 @@
-****# Good Energy (Archived)
+***** Good Energy (Archived)
 
 **Status:** Archived / abandonware / historical reference only
 **Intended use:** **Posterity, research, and code archaeology** — **not** reuse or deployment
